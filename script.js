@@ -16,14 +16,32 @@ function extractFruit(e){
 
 const fruitNutrition = document.querySelector("#nutritionSection p")
 
-function fetchFruitData(fruit){
+/*function fetchFruitData(fruit){
     fetch(`https://fruity-api.onrender.com/fruits/${fruit}`)
     .then(processResponse)
     .then(data => addFruit(data))
     .catch((err) =>console.log(err))
                               //we take data - need to convert from json back to js code 
 
+}*/
+
+async function fetchFruitData(fruit){
+    try{
+        const response = await fetch(`https://fruity-api.onrender.com/fruits/${fruit}`)
+        if(response.ok){
+            const data = await response.json()
+            addFruit(data)
+        }else{
+            throw "Error: http status code = " + response.status
+        }
+
+    } catch(error){
+        console.log(error)
+    }
+
 }
+
+
 function processResponse(resp){
     if(resp.ok){
         return resp.json()

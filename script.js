@@ -1,94 +1,71 @@
-const fruitform = document.querySelector("#inputSection form")
 
-//when someone submits the form, we extract the fruit that they have submitted
-fruitform.addEventListener("submit", extractFruit)
+const fruitForm = document.querySelector("#inputSection form")
+fruitForm.addEventListener("submit", extractFruit)
 
-
-function extractFruit(e){
-    e.preventDefault()       
-    fetchFruitData(e.target[0].value) 
-    e.target[0].value = ""
+function extractFruit(e) {
+  e.preventDefault()
+  fetchFruitData(e.target[0].value)
+  e.target[0].value = ""
 }
 
-// we want to find the target value which has been submitted in this form - using array sq bracket notation - e.target[0].value - this grabs the value of the input when submit occurs
+// function fetchFruitData(fruit){
+//     fetch(`https://fruity-api.onrender.com/fruits/${fruit}`)
+//         .then(processResponse)
+//         .then(data => addFruit(data))
+//         .catch(err => console.log(err))
+// }
 
-// now we have extracted the submission
-
-const fruitNutrition = document.querySelector("#nutritionSection p")
-
-/*function fetchFruitData(fruit){
-    fetch(`https://fruity-api.onrender.com/fruits/${fruit}`)
-    .then(processResponse)
-    .then(data => addFruit(data))
-    .catch((err) =>console.log(err))
-                              //we take data - need to convert from json back to js code 
-
-}*/
-
-async function fetchFruitData(fruit){
-    try{
-        const response = await fetch(`https://fruity-api.onrender.com/fruits/${fruit}`)
-        if(response.ok){
-            const data = await response.json()
-            addFruit(data)
-        }else{
-            throw "Error: http status code = " + response.status
-        }
-
-    } catch(error){
-        console.log(error)
+const fetchFruitData = async (fruit) => {
+  try {
+    const response = await fetch(`https://fruity-api.onrender.com/fruits/${fruit}`)
+    const fruityResponse = await fetch(`https://pixabay.com/api/?q=${fruit}+fruit&key=40368210-c161c470fcd7ab17a35a38235`)
+    console.log(fruityResponse)
+    if (response.ok && fruityResponse.ok) {
+      const data = await response.json()
+      const { hits } = await fruityResponse.json()
+      console.log(hits)
+      addFruit(data, hits)
+    } else {
+      throw "Error: http status code = " + response.status
     }
-
+  } catch (err) {
+    console.log(err)
+  }
 }
-
-
-function processResponse(resp){
-    if(resp.ok){
-        return resp.json()
-    }
-    else{
-        throw "Error: http status code = "+ resp.status
-    }
-}
-
 
 const fruitList = document.querySelector("#fruitSection ul")
+const fruitNutrition = document.querySelector("#nutritionSection p")
 
-let calories = 0; 
-let fruitCal = {}
+let calories = 0
+const fruitCal = {}
 
-function addFruit(fruit){
-    if(!fruit){
-        console.log('Invalid Fruit')
-    } else {
-    const li = document.createElement("li"); // adds a new list item
-    li.addEventListener("click", removeFruit, {once:true}) // option to remove  - //once:true makes sure the event listener doesnt wait around for it as the list item has been deleted
-    li.textContent = fruit['name']  // li is set to fruit 
-    fruitList.appendChild(li) // appends li inside ul 
+function addFruit(fruit, imageObj) {
+  if (!fruit || !imageObj) {
+    console.log("Invalid fruit")
+  } else {
+    const li = document.createElement("li")
+    const img = document.createElement("img")
+    li.addEventListener("click", removeFruit, { once: true })
+    li.textContent = fruit["name"]
+    img.setAttribute("src", imageObj[0].previewURL)
+    li.appendChild(img)
+    fruitList.appendChild(li)
+
+
+
     fruitCal[fruit.name] = fruit.nutritions.calories
+
     calories += fruit.nutritions.calories
     fruitNutrition.textContent = calories
-
-    //for deleting calories along with the fruit 
-    // -
-
-}}
-
-
-//every time addFruit is called, we add a new item to the unordered list which is the fruit which has been submitted
-
-// ** add Fruit is then used with extracFruit to add the submitted fruit to the DOM/ List in HTML 
-
-function removeFruit(e){
-    const fruitName = e.target.textContent
-    calories -= fruitCal[fruitName]
-    fruitNutrition.textContent = calories
-
-    delete fruitCal[fruitName]
-
-    e.target.remove()
-    
+  }
 }
 
+function removeFruit(e) {
+  const fruitName = e.target.textContent
+  calories -= fruitCal[fruitName]
+  fruitNutrition.textContent = calories
 
- 
+  delete fruitCal[fruitName]
+
+  e.target.remove()
+}

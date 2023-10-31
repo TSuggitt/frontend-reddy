@@ -8,8 +8,9 @@ fruitForm.addEventListener("submit", extractFruit)
 // this is a function which: 
 function extractFruit(e) {
   e.preventDefault() // this prevents the form from submitting and refreshing the page
-  fetchFruitData(e.target[0].value) // this returns the API element - then it returns its attributes, then it returns the first attribute and the value stored in the value key - in this case the name of the fruit.
-  e.target[0].value = ""
+  fetchFruitData(e.target[0].value) 
+ // e.target[0].value is the value we input and submit in the submission box 
+  e.target[0].value = "" // this resets the submission box to being blank
 }
 
 // ^^this function extracts the object of a fruit from the fruit API

@@ -9,10 +9,14 @@ fruitForm.addEventListener("submit", extractFruit)
 // this is a function which: 
 function extractFruit(e) {
   e.preventDefault() // this prevents the form from submitting and refreshing the page
-  fetchFruitData(e.target[0].value) // this returns the API element - then it returns its attributes, then it returns the first attribute and the value stored in the value key - in this case the name of the fruit.
+  fetchFruitData(e.target[0].value)
+  console.log(e.target)
+  console.log(e.target[0])
+  console.log(e.target[0].value) // this returns the API element - then it returns its attributes, then it returns the first attribute and the value stored in the value key - in this case the name of the fruit.
   e.target[0].value = ""
 }
 
+// ^^this function extracts the object of a fruit from the fruit API
 
 // function fetchFruitData(fruit){
 //     fetch(`https://fruity-api.onrender.com/fruits/${fruit}`)
@@ -83,7 +87,7 @@ function addFruit(fruit, imageObj) {
     calories += fruit.nutritions.calories
     // as each fruit is added to the list, their corresponding calories are added to the total calorie count
     fruitNutrition.textContent = calories
-    // this assigns the calorie counter as the new total for the calories of the fruits added
+    // this assigns the calorie counter as the new total for the calories of the fruits added, within the p tag in the nutrition section
 
   }
 }
@@ -100,5 +104,20 @@ function removeFruit(e) {
 
   e.target.remove() // this removes the fruit from the list once the fruit has been clicked. 
 }
+
+//overall image of what is happening in this file: 
+
+/*
+We have a function which extracts a fruit as an object from the fruit API
+We have a function which fetches data from the fruit API and the pixabay API and given a successful request, comverts this data from a JSON format to a javascript-readable format 
+
+We have a function which then takes the data from the fruit API and the pixabay API
+and adds the fruit name and image as a list item in the unordered fruit section list, 
+as well as accumulating the calories of each fruit in the below nutrition section
+
+We finally then have eventlisteners inside the function which adds fruit to the listen which delete the fruit from the list if that list item is clicked, along with removing the calories from the cumulative calorie total.
+This is handled by creating an object where the key value pairs are fruit:calories where we can subtract the calories from the calorie total. 
+
+*/
 
 },{}]},{},[1]);

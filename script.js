@@ -9,7 +9,8 @@ fruitForm.addEventListener("submit", extractFruit)
 function extractFruit(e) {
   e.preventDefault() // this prevents the form from submitting and refreshing the page
   fetchFruitData(e.target[0].value) 
- // e.target[0].value is the value we input and submit in the submission box 
+ // e.target[0].value is the value we input and submit in the submission box - this function then allows us to extract the name and caloric values from the fruity API.
+ // - value returns the value submitted in the text field, target returns the element on which the event occurred - in this case the 'fruitIn' section, so target[0] returns the element of the text-submission-input. 
   e.target[0].value = "" // this resets the submission box to being blank
 }
 
@@ -64,7 +65,7 @@ function addFruit(fruit, imageObj) {
     li.addEventListener("click", removeFruit, { once: true })
     // when the given list item is clicked, removeFruit is invoked and the list item is removed, along with the calories and its image
     li.textContent = fruit["name"] 
-    // given a correct request, the list item when it is produced will be set to the name property of the fruit in the fruity API 
+    // given a correct request, the list item when it is produced will be set to the name property of the fruit in the fruity API using the fruit object.
     img.setAttribute("src", imageObj[0].previewURL)
     // the image will be assigned as source value which is equal to the 
     // preview URL of the image object where the image object is the 'hits' value of the repsonse from the pixaby API - the hits are the search results - so this is assigning the image source as the URL of the first image that appears in the search request.
